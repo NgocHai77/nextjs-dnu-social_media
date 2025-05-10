@@ -39,7 +39,7 @@ export async function getUserPosts(userId: string) {
   try {
     const posts = await prisma.post.findMany({
       where: {
-        authorId: userId,
+        anthorId: userId,
       },
       include: {
         anthor: {
@@ -52,7 +52,7 @@ export async function getUserPosts(userId: string) {
         },
         comments: {
           include: {
-            author: {
+            anthor: {
               select: {
                 id: true,
                 name: true,
@@ -62,7 +62,7 @@ export async function getUserPosts(userId: string) {
             },
           },
           orderBy: {
-            createAt: "asc",
+            createdAt: "asc",
           },
         },
         likes: {
@@ -78,7 +78,7 @@ export async function getUserPosts(userId: string) {
         },
       },
       orderBy: {
-        createAt: "desc",
+        createdAt: "desc",
       },
     });
 
@@ -110,7 +110,7 @@ export async function getUserLikedPosts(userId: string) {
         },
         comments: {
           include: {
-            author: {
+            anthor: {
               select: {
                 id: true,
                 name: true,
@@ -120,7 +120,7 @@ export async function getUserLikedPosts(userId: string) {
             },
           },
           orderBy: {
-            createAt: "asc",
+            createdAt: "asc",
           },
         },
         likes: {
@@ -136,7 +136,7 @@ export async function getUserLikedPosts(userId: string) {
         },
       },
       orderBy: {
-        createAt: "desc",
+        createdAt: "desc",
       },
     });
 

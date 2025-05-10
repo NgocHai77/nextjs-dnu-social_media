@@ -32,7 +32,7 @@ export async function getNotifications() {
           select: {
             id: true,
             content: true,
-            createAt: true,
+            createdAt: true,
           },
         },
       },

@@ -95,7 +95,7 @@ function PostCard({post,dbUserId} : { post:Post; dbUserId: string | null}){
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Link href={`/profile/${post.anthor.username}`}>@{post.anthor.username}</Link>
                     <span>•</span>
-                    <span>{formatDistanceToNow(new Date(post.createAt))} ago</span>
+                    <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
                   </div>
                 </div>
                 {/* Check if current user is the post author */}
@@ -162,17 +162,17 @@ function PostCard({post,dbUserId} : { post:Post; dbUserId: string | null}){
                 {post.comments.map((comment) => (
                   <div key={comment.id} className="flex space-x-3">
                     <Avatar className="size-8 flex-shrink-0">
-                      <AvatarImage src={comment.author.image ?? "/avatar.png"} />
+                      <AvatarImage src={comment.anthor.image ?? "/avatar.png"} />
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="font-medium text-sm">{comment.author.name}</span>
+                        <span className="font-medium text-sm">{comment.anthor.name}</span>
                         <span className="text-sm text-muted-foreground">
-                          @{comment.author.username}
+                          @{comment.anthor.username}
                         </span>
                         <span className="text-sm text-muted-foreground">·</span>
                         <span className="text-sm text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.createAt))} ago
+                          {formatDistanceToNow(new Date(comment.createdAt))} ago
                         </span>
                       </div>
                       <p className="text-sm break-words">{comment.content}</p>

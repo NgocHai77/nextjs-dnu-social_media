@@ -15,7 +15,7 @@ export async function createPost(content: string, image: string) {
       data: {
         content,
         image,
-        authorId: userId,
+        anthorId: userId,
       },
     });
 
@@ -31,7 +31,7 @@ export async function getPosts() {
   try {
     const posts = await prisma.post.findMany({
       orderBy: {
-        createAt: "desc",
+        createdAt: "desc",
       },
       include: {
         anthor: {
@@ -44,7 +44,7 @@ export async function getPosts() {
         },
         comments: {
           include: {
-            author: {
+            anthor: {
               select: {
                 id: true,
                 username: true,
@@ -54,7 +54,7 @@ export async function getPosts() {
             },
           },
           orderBy: {
-            createAt: "asc",
+            createdAt: "asc",
           },
         },
         likes: {
@@ -95,7 +95,7 @@ export async function toggleLike(postId: string) {
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: { authorId: true },
+      select: { anthorId: true },
     });
 
     if (!post) throw new Error("Post not found");
@@ -119,12 +119,12 @@ export async function toggleLike(postId: string) {
             postId,
           },
         }),
-        ...(post.authorId !== userId
+        ...(post.anthorId !== userId
           ? [
               prisma.notification.create({
                 data: {
                   type: "LIKE",
-                  userId: post.authorId, // recipient (post author)
+                  userId: post.anthorId, // recipient (post author)
                   creatorId: userId, // person who liked
                   postId,
                 },
@@ -151,7 +151,7 @@ export async function createComment(postId: string, content: string) {
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: { authorId: true },
+      select: { anthorId: true },
     });
 
     if (!post) throw new Error("Post not found");
@@ -162,17 +162,17 @@ export async function createComment(postId: string, content: string) {
       const newComment = await tx.comment.create({
         data: {
           content,
-          authorId: userId,
+          anthorId: userId,
           postId,
         },
       });
 
       // Create notification if commenting on someone else's post
-      if (post.authorId !== userId) {
+      if (post.anthorId !== userId) {
         await tx.notification.create({
           data: {
             type: "COMMENT",
-            userId: post.authorId,
+            userId: post.anthorId,
             creatorId: userId,
             postId,
             commentId: newComment.id,
@@ -197,11 +197,11 @@ export async function deletePost(postId: string) {
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: { authorId: true },
+      select: { anthorId: true },
     });
 
     if (!post) throw new Error("Post not found");
-    if (post.authorId !== userId) throw new Error("Unauthorized - no delete permission");
+    if (post.anthorId !== userId) throw new Error("Unauthorized - no delete permission");
 
     await prisma.post.delete({
       where: { id: postId },
